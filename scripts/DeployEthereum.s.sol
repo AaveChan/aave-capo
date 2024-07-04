@@ -5,6 +5,7 @@ import {EthereumScript} from 'aave-helpers/ScriptUtils.sol';
 import {AaveV3Ethereum, AaveV3EthereumAssets} from 'aave-address-book/AaveV3Ethereum.sol';
 
 import {PriceCapAdapterStable} from '../src/contracts/PriceCapAdapterStable.sol';
+import {SDOracle} from '../src/contracts/SDOracle.sol';
 import {IPriceCapAdapter, IChainlinkAggregator} from '../src/interfaces/IPriceCapAdapter.sol';
 import {IPriceCapAdapterStable} from '../src/interfaces/IPriceCapAdapterStable.sol';
 import {WeETHPriceCapAdapter} from '../src/contracts/lst-adapters/WeETHPriceCapAdapter.sol';
@@ -14,6 +15,8 @@ library CapAdaptersCodeEthereum {
   address public constant weETH = 0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee;
   address public constant osETH_VAULT_CONTROLLER = 0x2A261e60FB14586B474C208b1B7AC6D0f5000306;
   address public constant USDe_PRICE_FEED = 0xa569d910839Ae8865Da8F8e70FfFb0cBA869F961;
+  address public constant SD_ETH_ORACLE = 0xF64bAe65f6f2a5277571143A24FaaFDFC0C2a737;
+  address public constant ETH_USD_ORACLE = 0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419;
 
   function weETHAdapterCode() internal pure returns (bytes memory) {
     return
@@ -71,6 +74,14 @@ library CapAdaptersCodeEthereum {
         )
       );
   }
+
+  function SDOracleCode() internal pure returns (bytes memory) {
+    return
+      abi.encodePacked(
+        type(SDOracle).creationCode,
+        abi.encode(SD_ETH_ORACLE, ETH_USD_ORACLE, 'SD / ETH / USD')
+      );
+  }
 }
 
 contract DeployWeEthEthereum is EthereumScript {
@@ -88,5 +99,11 @@ contract DeployOsEthEthereum is EthereumScript {
 contract DeployUSDeEthereum is EthereumScript {
   function run() external broadcast {
     GovV3Helpers.deployDeterministic(CapAdaptersCodeEthereum.USDeAdapterCode());
+  }
+}
+
+contract DeploySDOracleEthereum is EthereumScript {
+  function run() external broadcast {
+    GovV3Helpers.deployDeterministic(CapAdaptersCodeEthereum.SDOracleCode());
   }
 }
