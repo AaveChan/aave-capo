@@ -31,7 +31,7 @@ contract SDOracle {
 
   function latestTimestamp() external view returns (uint256)
   {
-	  return 0;
+	  return IChainlinkAggregator(ETH_USD_ORACLE).latestTimestamp();
   }
 
   function latestRound() external view returns (uint256)

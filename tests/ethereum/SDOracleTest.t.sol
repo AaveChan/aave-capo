@@ -10,7 +10,7 @@ import {CapAdaptersCodeEthereum} from '../../scripts/DeployEthereum.s.sol';
 
 contract SDOracleTest is Test {
 	function setUp() public {
-    vm.createSelectFork(vm.rpcUrl('mainnet'), 20000000);
+    vm.createSelectFork(vm.rpcUrl('mainnet'), 20231970);
 	}
 
 	function test_all() public {
@@ -25,6 +25,7 @@ contract SDOracleTest is Test {
 		console.log('Price', uint256(price));
 		console.log('Expected', uint256(expectedPrice));
 		console.log('with', oracle.decimals(), 'decimals');
+		console.log('timestamp', oracle.latestTimestamp());
 		assertEq(price, expectedPrice);
 	}
 }
