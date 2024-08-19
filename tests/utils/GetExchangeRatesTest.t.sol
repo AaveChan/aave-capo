@@ -30,7 +30,7 @@ import {IOsTokenVaultController} from '../../src/interfaces/IOsTokenVaultControl
 import {IEthX} from '../../src/interfaces/IEthX.sol';
 
 import {CapAdaptersCodeEthereum} from '../../scripts/DeployEthereum.s.sol';
-import {CapAdaptersCodeArbitrum} from '../../scripts/DeployArbitrumWeEth.s.sol';
+import {CapAdaptersCodeArbitrum} from '../../scripts/DeployArbitrum.s.sol';
 import {CapAdaptersCodeBase} from '../../scripts/DeployBase.s.sol';
 import {CapAdaptersCodeScroll} from '../../scripts/DeployScroll.s.sol';
 
@@ -69,7 +69,7 @@ contract ExchangeRatesEth is Test {
 
 contract ExchangeRatesArbitrum is Test {
   function setUp() public {
-    vm.createSelectFork(vm.rpcUrl('arbitrum'), 194797824); // 27th of March
+    vm.createSelectFork(vm.rpcUrl('arbitrum'), 241400000); // August 11
   }
 
   function test_getExchangeRate() public view {
@@ -82,11 +82,15 @@ contract ExchangeRatesArbitrum is Test {
     uint256 weEthRate = uint256(
       IChainlinkAggregator(CapAdaptersCodeArbitrum.weETH_eETH_AGGREGATOR).latestAnswer()
     );
+    uint256 EthxRate = uint256(
+      IChainlinkAggregator(CapAdaptersCodeArbitrum.ETHx_ETH_RATE_AGGREGATOR).latestAnswer()
+    );
 
     console.log('Arbitrum');
     console.log('rEthRate', rEthRate);
     console.log('wstEthRate', wstEthRate);
     console.log('weEthRate', weEthRate);
+    console.log('EthxRate', EthxRate);
     console.log(block.timestamp);
   }
 }

@@ -23,6 +23,7 @@ deploy-weeth-base :; forge script scripts/DeployBase.s.sol:DeployWeEthBase --rpc
 deploy-oseth-mainnet :; forge script scripts/DeployEthereum.s.sol:DeployOsEthEthereum --rpc-url mainnet $(common-flags)
 
 deploy-ethx-mainnet :; forge script scripts/DeployEthereum.s.sol:DeployEthXEthereum --rpc-url mainnet $(common-flags)
+deploy-ethx-mainnet :; forge script scripts/DeployArbitrum.s.sol:DeployETHxEthereum --rpc-url arbitrum $(common-flags)
 
 deploy-susde-mainnet :; forge script scripts/DeployEthereum.s.sol:DeploySUSDeEthereum --rpc-url mainnet $(common-flags)
 
