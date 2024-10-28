@@ -8,13 +8,13 @@ import {IPriceCapAdapter} from '../../src/interfaces/IPriceCapAdapter.sol';
 import {CLAdapterBaseTest} from '../CLAdapterBaseTest.sol';
 import {CapAdaptersCodeArbitrum} from '../../scripts/DeployArbitrum.s.sol';
 
-contract weETHArbitrumPriceCapAdapterTest is CLAdapterBaseTest {
+contract ETHxArbitrumPriceCapAdapterTest is CLAdapterBaseTest {
   constructor()
     CLAdapterBaseTest(
-      CapAdaptersCodeArbitrum.weETHAdapterCode(),
-      30,
-      ForkParams({network: 'arbitrum', blockNumber: 197799635}),
-      'weETH_arbitrum'
+      CapAdaptersCodeArbitrum.ETHxAdapterCode(),
+      9,
+      ForkParams({network: 'arbitrum', blockNumber: 268651295}),
+      'ETHx_arbitrum'
     )
   {}
 }
