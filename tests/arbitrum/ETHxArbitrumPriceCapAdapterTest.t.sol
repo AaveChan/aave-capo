@@ -13,7 +13,7 @@ contract ETHxArbitrumPriceCapAdapterTest is CLAdapterBaseTest {
     CLAdapterBaseTest(
       CapAdaptersCodeArbitrum.ETHxAdapterCode(),
       30,
-      ForkParams({network: 'arbitrum', blockNumber: 244457425}),
+      ForkParams({network: 'arbitrum', blockNumber: 268651295}),
       'ETHx_arbitrum'
     )
   {}
