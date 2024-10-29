@@ -28,6 +28,7 @@ import {IStEUR} from '../../src/interfaces/IStEUR.sol';
 import {IWeEth} from '../../src/interfaces/IWeEth.sol';
 import {IOsTokenVaultController} from '../../src/interfaces/IOsTokenVaultController.sol';
 import {IEthX} from '../../src/interfaces/IEthX.sol';
+import {IwBETH} from '../../src/interfaces/IwBETH.sol';
 import {IEzETHRestakeManager, IEzEthToken} from '../../src/interfaces/IEzETH.sol';
 
 import {CapAdaptersCodeEthereum} from '../../scripts/DeployEthereum.s.sol';
@@ -237,16 +238,20 @@ contract ExchangeRatesScroll is Test {
 
 contract ExchangeRatesBNB is Test {
   function setUp() public {
-    vm.createSelectFork(vm.rpcUrl('bnb'), 42490000); // Sep-22-2024
+    vm.createSelectFork(vm.rpcUrl('bnb'), 43100000); // Oct-15-2024
   }
 
   function test_getExchangeRate() public view {
     uint256 wstEthRate = uint256(
       IChainlinkAggregator(CapAdaptersCodeBNB.wstETH_stETH_AGGREGATOR).latestAnswer()
     );
+    uint256 wBEthRate = uint256(
+      IwBETH(CapAdaptersCodeBNB.wBETH).exchangeRate()
+    );
 
     console.log('BNB');
     console.log('wstEthRate', wstEthRate);
+    console.log('wBEthRate', wBEthRate);
     console.log(block.timestamp);
   }
 }
