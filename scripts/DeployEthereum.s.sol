@@ -11,6 +11,7 @@ import {ChainlinkEthereum} from 'aave-address-book/ChainlinkEthereum.sol';
 import {PriceCapAdapterStable} from '../src/contracts/PriceCapAdapterStable.sol';
 import {IPriceCapAdapter, IChainlinkAggregator} from '../src/interfaces/IPriceCapAdapter.sol';
 import {IPriceCapAdapterStable} from '../src/interfaces/IPriceCapAdapterStable.sol';
+import {tETHPriceCapAdapter} from '../src/contracts/lst-adapters/tETHPriceCapAdapter.sol';
 import {WeETHPriceCapAdapter} from '../src/contracts/lst-adapters/WeETHPriceCapAdapter.sol';
 import {OsETHPriceCapAdapter} from '../src/contracts/lst-adapters/OsETHPriceCapAdapter.sol';
 import {EthXPriceCapAdapter} from '../src/contracts/lst-adapters/EthXPriceCapAdapter.sol';
@@ -33,6 +34,7 @@ import {BaseAggregatorsMainnet} from 'cl-synchronicity-price-adapter/lib/BaseAgg
 library CapAdaptersCodeEthereum {
   using SafeCast for uint256;
 
+  address public constant tETH = 0xD11c452fc99cF405034ee446803b6F6c1F6d5ED8;
   address public constant weETH = 0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee;
   address public constant osETH_VAULT_CONTROLLER = 0x2A261e60FB14586B474C208b1B7AC6D0f5000306;
   address public constant USDe_PRICE_FEED = 0xa569d910839Ae8865Da8F8e70FfFb0cBA869F961;
@@ -51,7 +53,27 @@ library CapAdaptersCodeEthereum {
   address public constant PT_eUSDe_29_MAY_2025 = 0x50D2C7992b802Eef16c04FeADAB310f31866a545;
   address public constant stETH = 0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84;
   address public constant rETH = 0xae78736Cd615f374D3085123A210448E74Fc6393;
-
+  
+  function tETHAdapterCode() internal pure returns (bytes memory) {
+    return
+      abi.encodePacked(
+        type(tETHPriceCapAdapter).creationCode,
+        abi.encode(
+          IPriceCapAdapter.CapAdapterParams({
+            aclManager: AaveV3Ethereum.ACL_MANAGER,
+            baseAggregatorAddress: ChainlinkEthereum.SVR_ETH_USD,
+            ratioProviderAddress: tETH,
+            pairDescription: 'Capped tETH / ETH / USD',
+            minimumSnapshotDelay: 14 days,
+            priceCapParams: IPriceCapAdapter.PriceCapUpdateParams({
+              snapshotRatio: 1001744918123016003,
+              snapshotTimestamp: 1745511431, // 24-04-2024
+              maxYearlyRatioGrowthPercent: 12_04
+            })
+          })
+        )
+      );
+  }
   function ptSUSDeJuly2025AdapterCode() internal pure returns (bytes memory) {
     return
       abi.encodePacked(
@@ -460,6 +482,12 @@ library CapAdaptersCodeEthereum {
           'wBTC/BTC/USD'
         )
       );
+  }
+}
+
+contract DeploytETHEthereum is EthereumScript {
+  function run() external broadcast {
+    GovV3Helpers.deployDeterministic(CapAdaptersCodeEthereum.tETHAdapterCode());
   }
 }
 
